@@ -1,4 +1,7 @@
-minetest.register_node("tech:composter_bin", {
+local composter = exile_composter
+local S = minetest.get_translator(minetest.get_current_modname())
+
+minetest.register_node("exile_composter:composter_bin", {
     description = S("Composter Bin"),
     tiles = {"tech_composter_bin_top.png",
     "tech_composter_bin.png",
@@ -43,12 +46,12 @@ minetest.register_node("tech:composter_bin", {
         local meta = minetest.get_meta(pos)
         meta:set_int("compost", 0)
         meta:set_string("infotext", "Composter (0% full)")
-         meta:set_string("formspec", get_composter_formspec(0))
+        meta:set_string("formspec", composter.get_composter_formspec(0))
         local inv = meta:get_inventory()
         inv:set_size('main', 4)
         inv:set_size('output', 8)
         local timer = minetest.get_node_timer(pos)
-        timer:start(seconds_to_compost)
+        timer:start(composter.seconds_to_compost)
     end,
 
     on_rightclick = function(pos, node, player, itemstack, pointed_thing)
@@ -57,7 +60,7 @@ minetest.register_node("tech:composter_bin", {
         local compost = meta:get_int("compost")
         meta:set_string("infotext", "Composter ("..compost.."% full)")
 
-        minetest.show_formspec(player_name, "tech:composter_bin", get_composter_formspec(compost))
+        minetest.show_formspec(player_name, "exile_composter:composter_bin", composter.get_composter_formspec(compost))
     end,
 
     allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
@@ -65,23 +68,18 @@ minetest.register_node("tech:composter_bin", {
             return 0
         end
         local inv = minetest.get_meta(pos):get_inventory()
-        -- Check if the item being moved has the 'compostable' group
         local stack = inv:get_stack(from_list, from_index)
         local item_name = stack:get_name()
-        local item_def = minetest.registered_items[item_name]
-        if item_def and item_def.groups.compostable then
-            -- Allow the item to be moved to the specified inventory list
+        if composter.is_compostable_name(item_name) then
             return count
         else
-            -- Deny the item from being moved to the specified inventory list
             return 0
         end
     end,
 
     allow_metadata_inventory_put = function(pos, listname, index, stack, player)
         if listname == "main" then
-            local def = stack:get_definition()
-            if def.groups and def.groups.compostable then
+            if composter.is_compostable_name(stack:get_name()) then
                 return stack:get_count()
             else
                 return 0
@@ -93,18 +91,18 @@ minetest.register_node("tech:composter_bin", {
 
     on_timer = function(pos, elapsed)
         local timer = minetest.get_node_timer(pos)
-        timer:start(seconds_to_compost)
+        timer:start(composter.seconds_to_compost)
 
         local meta = minetest.get_meta(pos)
         local inv = meta:get_inventory()
         local compost = meta:get_int("compost")
 
-        compost = generate_compost(inv, compost)
-        compost = process_compostable_items(inv, compost)
+        compost = composter.generate_compost(inv, compost)
+        compost = composter.process_compostable_items(inv, compost)
 
         meta:set_int("compost", compost)
         meta:set_string("infotext", "Composter ("..compost.."% full)")
-        meta:set_string("formspec", get_composter_formspec(compost))
+        meta:set_string("formspec", composter.get_composter_formspec(compost))
     end,
 
     on_destruct = function(pos)
