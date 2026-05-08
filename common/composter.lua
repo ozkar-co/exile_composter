@@ -26,13 +26,13 @@ function composter.get_composter_formspec(compost)
         .. "label[0,0;Composter: "
         .. compost
         .. "%]"
-        .. "list[current_name;main;0,0.5;2,2]"
-        .. "list[current_name;output;4,0.5;4,2]"
+        .. "list[current_name;main;0,0.5;4,2]"
+        .. "list[current_name;output;6,0.5;2,2]"
         .. "list[current_player;main;0,3;8,4;]"
         .. "listring[current_name;main]"
         .. "listring[current_name;output]"
         .. "listring[current_player;main]"
-        .. "image[2.5,1;1,1;exile_composter_arrow.png;]"
+        .. "image[4.75,1;1,1;exile_composter_arrow.png;]"
     return formspec
 end
 
@@ -75,16 +75,31 @@ end
 
 function composter.process_compostable_items(inv, compost)
     -- Compost value is based on quantity: each consumed item adds 1 compost.
-    for _, item in ipairs(inv:get_list("main")) do
-        if item and item:get_count() > 0 then
-            local name = item:get_name()
-            if is_compostable_name(name) then
-                if compost < 100 then
-                    inv:remove_item("main", ItemStack(name .. " 1"))
-                    compost = compost + 1
-                end
-            end
+    local slots = {}
+
+    for index, item in ipairs(inv:get_list("main")) do
+        if item and item:get_count() > 0 and is_compostable_name(item:get_name()) then
+            slots[#slots + 1] = index
         end
     end
+
+    for index = #slots, 2, -1 do
+        local other = math.random(index)
+        slots[index], slots[other] = slots[other], slots[index]
+    end
+
+    for _, slot_index in ipairs(slots) do
+        if compost >= 100 then
+            break
+        end
+
+        local stack = inv:get_stack("main", slot_index)
+        if not stack:is_empty() and is_compostable_name(stack:get_name()) then
+            stack:take_item(1)
+            inv:set_stack("main", slot_index, stack)
+            compost = compost + 1
+        end
+    end
+
     return compost
 end
