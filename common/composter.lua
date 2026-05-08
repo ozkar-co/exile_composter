@@ -32,7 +32,7 @@ function composter.get_composter_formspec(compost)
         .. "listring[current_name;main]"
         .. "listring[current_name;output]"
         .. "listring[current_player;main]"
-        .. "image[2.5,1;1,1;tech_arrow.png;]"
+        .. "image[2.5,1;1,1;exile_composter_arrow.png;]"
     return formspec
 end
 

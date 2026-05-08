@@ -3,11 +3,11 @@ local S = minetest.get_translator(minetest.get_current_modname())
 
 minetest.register_node("exile_composter:composter_bin", {
     description = S("Composter Bin"),
-    tiles = {"tech_composter_bin_top.png",
-    "tech_composter_bin.png",
-    "tech_composter_bin.png",
-    "tech_composter_bin.png",
-    "tech_composter_bin.png"},
+    tiles = {"exile_composter_bin_top.png",
+    "exile_composter_bin.png",
+    "exile_composter_bin.png",
+    "exile_composter_bin.png",
+    "exile_composter_bin.png"},
     drawtype = "nodebox",
     stack_max = 1,
     paramtype = "light",

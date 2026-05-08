@@ -75,6 +75,9 @@ This mod ships its own fertilizer textures:
 - `exile_composter_humus.png`
 - `exile_composter_vermicompost.png`
 - `exile_composter_bonemeal.png`
+- `exile_composter_bin.png`
+- `exile_composter_bin_top.png`
+- `exile_composter_arrow.png`
 
 ## Public API
 
