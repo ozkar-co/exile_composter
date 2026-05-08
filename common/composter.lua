@@ -7,6 +7,7 @@ local function is_compostable_name(item_name)
     end
 
     local groups = def.groups or {}
+    local foods = rawget(_G, "food_table")
     local is_plant = (groups.flora or 0) > 0
         or (groups.fibrous_plant or 0) > 0
         or (groups.woody_plant or 0) > 0
@@ -15,8 +16,9 @@ local function is_compostable_name(item_name)
     local is_animal = item_name:sub(1, 8) == "animals:"
     local is_edible = (groups.edible or 0) > 0
     local has_compost_group = (groups.compost or 0) > 0
+    local is_registered_food = type(foods) == "table" and foods[item_name] ~= nil
 
-    return is_plant or is_animal or is_edible or has_compost_group
+    return is_plant or is_animal or is_edible or has_compost_group or is_registered_food
 end
 
 composter.is_compostable_name = is_compostable_name
@@ -32,7 +34,7 @@ function composter.get_composter_formspec(compost)
         .. "listring[current_name;main]"
         .. "listring[current_name;output]"
         .. "listring[current_player;main]"
-        .. "image[4.75,1;1,1;exile_composter_arrow.png;]"
+        .. "image[4.5,1;1,1;exile_composter_arrow.png;]"
     return formspec
 end
 

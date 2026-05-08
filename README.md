@@ -23,9 +23,12 @@ An item is accepted if it is at least one of:
 - A plant item (for example `flora`, `fibrous_plant`, `woody_plant`, `cane_plant`, `mushroom` groups).
 - An animal item (item name in the `animals:` namespace).
 - An edible item (group `edible`).
+- A food registered by Exile's public `health` system (`food_table`).
 - Any item tagged with group `compost`.
 
 Note for related mods: the `compost` group is an optional integration hook. If your mod adds custom organic items, set `groups = { compost = 1 }` to make them compostable.
+
+This also covers public Exile foods such as `nodes_nature:maraka_nut` and `nodes_nature:tangkal_fruit`, which are edible through `health` even if they do not expose the `edible` group directly.
 
 ## How To Use
 
