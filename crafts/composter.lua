@@ -13,3 +13,11 @@ crafting.register_recipe({
 	level = 1,
 	always_known = true,
 })
+
+crafting.register_recipe({
+	type = "mortar_and_pestle",
+	output = "exile_composter:mulch",
+	items = {"nodes_nature:sasaran_cone"},
+	level = 1,
+	always_known = true,
+})

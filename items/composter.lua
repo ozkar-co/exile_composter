@@ -20,3 +20,12 @@ minetest.register_craftitem("exile_composter:bonemeal", {
     stack_max = minimal.stack_max_large,
     groups = { fertilizer = 1 },
 })
+
+
+minetest.register_craftitem("exile_composter:mulch", {
+    description = S("Mulch"),
+    inventory_image = "exile_composter_mulch.png",
+    stack_max = minimal.stack_max_large,
+    groups = { fertilizer = 1 },
+})
+
