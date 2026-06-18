@@ -97,8 +97,8 @@ minetest.register_node("exile_composter:composter_bin", {
         local inv = meta:get_inventory()
         local compost = meta:get_int("compost")
 
-        compost = composter.generate_compost(inv, compost)
-        compost = composter.process_compostable_items(inv, compost)
+        compost = composter.absorb_inputs(inv, compost)
+        compost = composter.try_outputs(inv, compost)
 
         meta:set_int("compost", compost)
         meta:set_string("infotext", "Composter ("..compost.."% full)")
